@@ -1,7 +1,11 @@
 require("dotenv").config()
 const mongoose = require("mongoose")
 
-mongoose.connect("mongodb://127.0.0.1.27017/user_roles");
+mongoose.connect("mongodb://127.0.0.1:27017/user_roles");
+
+mongoose.connection.on('connected', () => {
+    console.log('Mongoose connected to MongoDB');
+});
 
 const express =  require('express');
 const app =  express();
