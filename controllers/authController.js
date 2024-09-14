@@ -1,6 +1,8 @@
 const user = require('../models/userModel');
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
+const  jwt = require('jsonwebtoken');
+
 
 const registerUser = async (req, res) => {
     try {
@@ -21,7 +23,7 @@ const registerUser = async (req, res) => {
 
         const existsUser= await  user.findOne({email});
 
-        if  (existsUser) {
+        if (existsUser) {
             return res.status(400).json({
                 success: false,
                 message: 'User already exists'
@@ -55,6 +57,88 @@ const registerUser = async (req, res) => {
     }
 };
 
+const generateAccessToken = async(user)=>{
+    const token = jwt.sign(user,process.env.ACCESS_SECRET_TOKEN,{expiresIn:"2h"});
+    return  token;
+
+}
+
+const  loginUser = async (req, res) => {
+    try{
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(200).json({
+                success: false,
+                message: 'Validation errors',
+                errors: errors.array()
+            });
+        }
+
+        const {email, password}= req.body;
+
+        const userData= await  user.findOne({email})
+        if (!userData){
+            
+            return res.status(500).json({
+            success: false,
+            message: 'Email and password is incorrect ',
+            error: error.message
+        });
+        }
+
+        const  isPasswordMatch = await bcrypt.compare(password, userData.password);
+        if (!isPasswordMatch) {
+            return res.status(500).json({
+                success: false,
+                message: 'Email and password is incorrect ',
+                error: error.message
+        })}
+
+        const accessToken = await  generateAccessToken({user: userData})
+
+        return res.status(200).json({
+            success: true,
+            message: 'Loged in Sucessfully',
+            accesToken: accessToken,
+            tokenType:'Bearer',
+            data: userData})         
+    }
+    catch(error){
+        console.error('Error finding  user:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Error registering user',
+            error: error.message
+        });
+
+    }
+}
+
+
+const getProfile = async  (req, res) => {
+    try {
+        return res.status(200).json({
+            success: true,
+            message: '',
+           
+        });
+
+    }
+    catch(error){
+        console.error('Error finding  user:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Error registering user',
+            error: error.message
+        });
+
+    }
+}
+
+
+
 module.exports = {
-    registerUser
+    registerUser,
+    loginUser,
+    getProfile
 };

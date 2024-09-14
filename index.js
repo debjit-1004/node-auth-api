@@ -12,10 +12,13 @@ const app =  express();
 app.use(express.json())
 app.use(express.static('public'))
 
-
+//authRoute
 const authRoute= require('./routes/authRoute')
-
 app.use('/api', authRoute)
+
+//adminRoute
+const adminRoute= require('./routes/adminRoute')
+app.use('/api', adminRoute)
 
 const post= process.env.SERVER_PORT || 3000
 

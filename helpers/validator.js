@@ -11,3 +11,9 @@ exports.registerValidator=[
     check('password').isLength({min:8}).withMessage('Password must be at least 8 digits long')
 ];
 
+exports.loginValidator=[
+        check('email').isEmail().normalizeEmail({
+        gmail_remove_dots:true
+    }).withMessage('Invalid email'),
+    check('password').isLength({min:8}).withMessage('Password must be at least 8 digits long')
+];
