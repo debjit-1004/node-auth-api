@@ -10,6 +10,8 @@ const {registerValidator, loginValidator} = require('../helpers/validator')
 router.post('/register',registerValidator, authController.registerUser)
 router.post('/login',loginValidator, authController.loginUser)
 
+
+//authentication route
 router.get('/profile',auth, authController.getProfile)
 
 

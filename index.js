@@ -20,6 +20,10 @@ app.use('/api', authRoute)
 const adminRoute= require('./routes/adminRoute')
 app.use('/api', adminRoute)
 
+//common route
+const commonRoute= require('./routes/commonRoute')
+app.use('/api',commonRoute)
+
 const post= process.env.SERVER_PORT || 3000
 
 app.listen(post,()=>{

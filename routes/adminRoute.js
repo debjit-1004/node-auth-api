@@ -1,11 +1,21 @@
 const express = require('express')
 const router = express.Router()
 
+const auth = require('../middlewares/authMiddleware')
 const permissonController= require('../controllers/admin/permissionController')
 
-const {permissionAddValidator} = require('../helpers/adminValidator')
+const {onlyAdminAccess} = require('../middlewares/adminMiddleware')
+const {permissionAddValidator, permissionDeleteValidator, permissionUpdateValidator} = require('../helpers/adminValidator')
 
-router.post('/admin/add-permission',permissionAddValidator,permissonController.addPermission)
+
+//Permission Routes
+router.post('/admin/add-permission',auth,onlyAdminAccess ,permissionAddValidator,permissonController.addPermission)
+
+router.get('/admin/get-permissions',auth , onlyAdminAccess,permissonController.getPermissions)
+
+router.post('/admin/delete-permission',auth ,onlyAdminAccess,permissionDeleteValidator , permissonController.deletePermission)
+
+router.post('/admin/update-permission',auth ,onlyAdminAccess ,permissionUpdateValidator,permissonController.updatePermission)
 
 
 module.exports= router;
