@@ -3,13 +3,28 @@ const router = express.Router()
 
 const auth = require('../middlewares/authMiddleware')
 
-const {categoryAddValidator} = require('../helpers/adminValidator')
+const {categoryAddValidator, categoryDeleteValidator, categoryUpdateValidator, postCreateValidator, postDeleteValidator, postUpdateValidator} = require('../helpers/adminValidator')
 const categoryController = require('../controllers/categoryController')
+
+
+const postController = require('../controllers/postController')
 
 
 //Permission Routes
 router.post('/add-category',auth ,categoryAddValidator,categoryController.addCategory)
-router.post('/get-categories',auth ,categoryController.getCategories )
+router.get('/get-categories',auth ,categoryController.getCategories )
+router.post('/delete-category',auth ,categoryDeleteValidator  ,  categoryController.deleteCategory )
+router.post('/update-category',auth ,categoryUpdateValidator  ,  categoryController.updateCategory )
+
+
+
+//post routes 
+router.post('/create-post',auth, postCreateValidator,postController.createPost)
+router.get('/get-posts',auth,postController.getPosts)
+router.post('/delete-post',auth, postDeleteValidator,postController.deletePost)
+router.post('/update-post',auth, postUpdateValidator,postController.updatePost)
+
+
 
 
 
