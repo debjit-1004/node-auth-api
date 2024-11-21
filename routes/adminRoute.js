@@ -17,5 +17,8 @@ router.post('/admin/delete-permission',auth ,onlyAdminAccess,permissionDeleteVal
 
 router.post('/admin/update-permission',auth ,onlyAdminAccess ,permissionUpdateValidator,permissonController.updatePermission)
 
+//roles routes
+router.post('/admin/add-role',auth,onlyAdminAccess ,permissionAddValidator,permissonController
+
 
 module.exports= router;
